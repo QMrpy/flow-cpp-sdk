@@ -17,8 +17,8 @@ class FlowClient {
 
         // Verify return type
         ::grpc::Status Ping(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
-            ::flow::access::PingRequest request;
-            ::flow::access::PingResponse response;
+            flow::access::PingRequest request;
+            flow::access::PingResponse response;
 
             ::grpc::Status status = stub_->Ping(context, request, &response);
 
@@ -26,10 +26,10 @@ class FlowClient {
         }
 
         // Verify if block or blockHeader is coming up
-        ::flow::access::BlockHeader* GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
-            ::flow::access::GetLatestBlockHeaderRequest request;
-            ::flow::access::BlockHeaderResponse response;
-            ::flow::access::BlockHeader *blockHeader;
+        flow::access::BlockHeader* GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
+            flow::access::GetLatestBlockHeaderRequest request;
+            flow::access::BlockHeaderResponse response;
+            flow::access::BlockHeader *blockHeader;
 
             request.set_is_sealed(is_sealed);
 
@@ -47,10 +47,10 @@ class FlowClient {
         }
 
         // Verify if block or blockHeader is coming up
-        ::flow::access::BlockHeader* GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-            ::flow::access::GetBlockHeaderByIdRequest request;
-            ::flow::access::BlockHeaderResponse response;
-            ::flow::access::BlockHeader *blockHeader;
+        flow::access::BlockHeader* GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+            flow::access::GetBlockHeaderByIdRequest request;
+            flow::access::BlockHeaderResponse response;
+            flow::access::BlockHeader *blockHeader;
 
             request.set_id(id);
 
@@ -68,10 +68,10 @@ class FlowClient {
         }
 
         // Verify if block or blockHeader is coming up
-        ::flow::access::BlockHeader* GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
-            ::flow::access::GetBlockHeaderByHeightRequest request;
-            ::flow::access::BlockHeaderResponse response;
-            ::flow::access::BlockHeader *blockHeader;
+        flow::access::BlockHeader* GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
+            flow::access::GetBlockHeaderByHeightRequest request;
+            flow::access::BlockHeaderResponse response;
+            flow::access::BlockHeader *blockHeader;
 
             request.set_height(height);
 
@@ -88,10 +88,10 @@ class FlowClient {
             }
         }
 
-        ::flow::access::Block* GetLatestBlock(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
-            ::flow::access::GetLatestBlockRequest request;
-            ::flow::access::BlockResponse response;
-            ::flow::access::Block *block;
+        flow::access::Block* GetLatestBlock(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
+            flow::access::GetLatestBlockRequest request;
+            flow::access::BlockResponse response;
+            flow::access::Block *block;
 
             request.set_is_sealed(is_sealed);
 
@@ -108,10 +108,10 @@ class FlowClient {
             }
         }
 
-        ::flow::access::Block* GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-            ::flow::access::GetBlockByIdRequest request;
-            ::flow::access::BlockResponse response;
-            ::flow::access::Block *block;
+        flow::access::Block* GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+            flow::access::GetBlockByIdRequest request;
+            flow::access::BlockResponse response;
+            flow::access::Block *block;
 
             request.set_id(id);
 
@@ -128,10 +128,10 @@ class FlowClient {
             }
         }
 
-        ::flow::access::Block* GetBlockByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
-            ::flow::access::GetBlockByHeightRequest request;
-            ::flow::access::BlockResponse response;
-            ::flow::access::Block *block;
+        flow::access::Block* GetBlockByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
+            flow::access::GetBlockByHeightRequest request;
+            flow::access::BlockResponse response;
+            flow::access::Block *block;
 
             request.set_height(height);
 
@@ -148,10 +148,10 @@ class FlowClient {
             }
         }
 
-        ::flow::access::Collection* GetCollectionByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-            ::flow::access::GetCollectionByIdRequest request;
-            ::flow::access::CollectionResponse response;
-            ::flow::access::Collection *collection;
+        flow::access::Collection* GetCollectionByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+            flow::access::GetCollectionByIdRequest request;
+            flow::access::CollectionResponse response;
+            flow::access::Collection *collection;
 
             request.set_id(id);
 
@@ -169,9 +169,9 @@ class FlowClient {
         }
 
         // Verify return type
-        ::grpc::Status SendTransaction(::grpc::ClientContext* context, ::flow::access::Transaction* transaction, const ::grpc::StubOptions& options) {
-            ::flow::access::SendTransactionRequest request;
-            ::flow::access::SendTransactionResponse response;
+        ::grpc::Status SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options) {
+            flow::access::SendTransactionRequest request;
+            flow::access::SendTransactionResponse response;
 
             request.set_allocated_transaction(transaction);
 
@@ -180,10 +180,10 @@ class FlowClient {
             return status;
         }
 
-        ::flow::access::Transaction* GetTransaction(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-            ::flow::access::GetTransactionRequest request;
-            ::flow::access::TransactionResponse response;
-            ::flow::access::Transaction* transaction;
+        flow::access::Transaction* GetTransaction(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+            flow::access::GetTransactionRequest request;
+            flow::access::TransactionResponse response;
+            flow::access::Transaction* transaction;
 
             request.set_id(id);
 
@@ -201,9 +201,9 @@ class FlowClient {
         }
 
         // May require modification to parse TransactionResult
-        ::flow::access::TransactionResultResponse* GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-            ::flow::access::GetTransactionRequest request;
-            ::flow::access::TransactionResultResponse* response;
+        flow::access::TransactionResultResponse* GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+            flow::access::GetTransactionRequest request;
+            flow::access::TransactionResultResponse* response;
 
             request.set_id(id);
 
@@ -215,10 +215,10 @@ class FlowClient {
             }
         }
 
-        ::flow::access::Account* GetAccountAtLatestBlock(::grpc::ClientContext* context, const char *address, const ::grpc::StubOptions& options) {
-            ::flow::access::GetAccountAtLatestBlockRequest request;
-            ::flow::access::AccountResponse response;
-            ::flow::access::Account *account;
+        flow::access::Account* GetAccountAtLatestBlock(::grpc::ClientContext* context, const char *address, const ::grpc::StubOptions& options) {
+            flow::access::GetAccountAtLatestBlockRequest request;
+            flow::access::AccountResponse response;
+            flow::access::Account *account;
 
             request.set_address(address);
 
@@ -235,10 +235,10 @@ class FlowClient {
             }
         }
         
-        ::flow::access::Account* GetAccountAtBlockHeight(::grpc::ClientContext* context, const char *address, uint64_t height, const ::grpc::StubOptions& options) {
-            ::flow::access::GetAccountAtBlockHeightRequest request;
-            ::flow::access::AccountResponse response;
-            ::flow::access::Account *account;
+        flow::access::Account* GetAccountAtBlockHeight(::grpc::ClientContext* context, const char *address, uint64_t height, const ::grpc::StubOptions& options) {
+            flow::access::GetAccountAtBlockHeightRequest request;
+            flow::access::AccountResponse response;
+            flow::access::Account *account;
 
             request.set_address(address);
             request.set_block_height(height);
@@ -267,4 +267,4 @@ class FlowClient {
 // Is a convert class needed to convert between message types? Is an entity class also needed?
 // May also implmenent async API
 // Fix the flow.pub.h error in VSCode
-// Look into: ::flow::access or flow::access?
+// Look into: flow::access or flow::access?
