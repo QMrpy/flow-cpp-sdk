@@ -3,7 +3,7 @@ Flow C++ SDK For Flow Hackathon
 
 ## Steps to compile and build the FlowClient
 
-1. Ensure that the required libraries are present and installed
+1. Ensure that the required libraries are present and installed.
 
       ```
       gcc==9.3.0
@@ -13,14 +13,14 @@ Flow C++ SDK For Flow Hackathon
       grpc==1.40.0
       ```
        
-2. Set environment variables in `~/.bashrc`
+2. Set environment variables in `~/.bashrc`. Ensure that this is the same directory used during installation of `grpc`.
 
       ```
       export MY_INSTALL_DIR=$HOME/.local
       export PATH="$MY_INSTALL_DIR/bin:$PATH"
       ```
       
-3. Clone the project
+3. Clone the project.
 
       ```
       git clone https://github.com/QMrpy/flow-cpp-sdk.git
