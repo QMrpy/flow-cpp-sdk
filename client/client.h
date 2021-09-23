@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include <grpc/grpc.h>
 #include <grpcpp/channel.h>
@@ -23,11 +24,17 @@ class FlowClient {
         flow::access::Block* GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
         flow::access::Block* GetBlockByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options);
         flow::access::Collection* GetCollectionByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
-        ::grpc::Status SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options);
+        flow::access::SendTransactionResponse* SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options);
         flow::access::Transaction* GetTransaction(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
-        flow::access::TransactionResultResponse* GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
+        std::vector<::flow::access::Event> GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
         flow::access::Account* GetAccountAtLatestBlock(::grpc::ClientContext* context, const char *address, const ::grpc::StubOptions& options);
         flow::access::Account* GetAccountAtBlockHeight(::grpc::ClientContext* context, const char *address, uint64_t height, const ::grpc::StubOptions& options);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char *script, const ::grpc::StubOptions& options);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const char *id, const ::grpc::StubOptions& options);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char *script, uint64_t height, const ::grpc::StubOptions& options);
+        std::vector<::flow::access::EventsResponse_Result> GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height, const ::grpc::StubOptions& options);
+        std::vector<::flow::access::EventsResponse_Result> GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const char *id, const ::grpc::StubOptions& options);
+        std::string GetNetworkParameters(::grpc::ClientContext* context, const ::grpc::StubOptions& options);
 
     private:
         std::unique_ptr<::flow::access::AccessAPI::Stub> stub_;

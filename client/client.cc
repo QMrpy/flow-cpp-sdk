@@ -13,19 +13,18 @@ FlowClient::FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel
     return status;
 }
 
-// Verify if block or blockHeader is coming up
 flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
     flow::access::GetLatestBlockHeaderRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader *blockHeader;
+    flow::access::BlockHeader *block_header;
 
     request.set_is_sealed(is_sealed);
 
     ::grpc::Status status = stub_->GetLatestBlockHeader(context, request, &response);
     if (status.ok()) {
         if (response.has_block()) {
-            blockHeader = new flow::access::BlockHeader(response.block());
-            return blockHeader;
+            block_header = new flow::access::BlockHeader(response.block());
+            return block_header;
         } else {
             return nullptr;
         }
@@ -34,19 +33,18 @@ flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContex
     }
 }
 
-// Verify if block or blockHeader is coming up
 flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
     flow::access::GetBlockHeaderByIdRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader *blockHeader;
+    flow::access::BlockHeader *block_header;
 
     request.set_id(id);
 
     ::grpc::Status status = stub_->GetBlockHeaderByID(context, request, &response);
     if (status.ok()) {
         if (response.has_block()) {
-            blockHeader = new flow::access::BlockHeader(response.block());
-            return blockHeader;
+            block_header = new flow::access::BlockHeader(response.block());
+            return block_header;
         } else {
             return nullptr;
         }
@@ -55,19 +53,18 @@ flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext*
     }
 }
 
-// Verify if block or blockHeader is coming up
 flow::access::BlockHeader* FlowClient::GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
     flow::access::GetBlockHeaderByHeightRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader *blockHeader;
+    flow::access::BlockHeader *block_header;
 
     request.set_height(height);
 
     ::grpc::Status status = stub_->GetBlockHeaderByHeight(context, request, &response);
     if (status.ok()) {
         if (response.has_block()) {
-            blockHeader = new flow::access::BlockHeader(response.block());
-            return blockHeader;
+            block_header = new flow::access::BlockHeader(response.block());
+            return block_header;
         } else {
             return nullptr;
         }
@@ -156,22 +153,24 @@ flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* c
     }
 }
 
-// Verify return type
-::grpc::Status FlowClient::SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options) {
+flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options) {
     flow::access::SendTransactionRequest request;
-    flow::access::SendTransactionResponse response;
+    flow::access::SendTransactionResponse *response;
 
     request.set_allocated_transaction(transaction);
 
-    ::grpc::Status status = stub_->SendTransaction(context, request, &response);
-
-    return status;
+    ::grpc::Status status = stub_->SendTransaction(context, request, response);
+    if (status.ok()) {
+        return response;
+    } else {
+        return nullptr;
+    }
 }
 
 flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
     flow::access::GetTransactionRequest request;
     flow::access::TransactionResponse response;
-    flow::access::Transaction* transaction;
+    flow::access::Transaction *transaction;
 
     request.set_id(id);
 
@@ -188,18 +187,27 @@ flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* con
     }
 }
 
-// May require modification to parse TransactionResult
-flow::access::TransactionResultResponse* FlowClient::GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
     flow::access::GetTransactionRequest request;
-    flow::access::TransactionResultResponse* response;
+    flow::access::TransactionResultResponse response;
+    std::vector<::flow::access::Event> results;
 
     request.set_id(id);
-
-    ::grpc::Status status = stub_->GetTransactionResult(context, request, response);
+    
+    ::grpc::Status status = stub_->GetTransactionResult(context, request, &response);
     if (status.ok()) {
-        return response;
+        if (response.events_size() > 0) {
+            
+            for (int idx = 0; idx < response.events_size(); idx++) {
+                results.emplace_back(response.events(idx));
+            }
+
+            return results;
+        } else {
+            return {};
+        }
     } else {
-        return nullptr;
+        return {};
     }
 }
 
@@ -244,14 +252,111 @@ flow::access::Account* FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext
     }
 }
 
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char *script, const ::grpc::StubOptions& options) {
+    flow::access::ExecuteScriptAtLatestBlockRequest request;
+    flow::access::ExecuteScriptResponse *response;
 
-// Handle errors in a better way. Use nullptr to initialize or make separate error types for response and status
-// How to compile this?
-// Do any server method or any of data type methods such as set_id() need implementation?
-// Is a convert class needed to convert between message types? Is an entity class also needed?
-// May also implmenent async API
-// Fix the flow.pub.h error in VSCode
-// Look into: flow::access or flow::access?
+    request.set_script(script);
+    
+    ::grpc::Status status = stub_->ExecuteScriptAtLatestBlock(context, request, response);
+    if (status.ok()) {
+        return response;
+    } else {
+        return nullptr;
+    }
+}
+
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const char *id, const ::grpc::StubOptions& options) {
+    flow::access::ExecuteScriptAtBlockIdRequest request;
+    flow::access::ExecuteScriptResponse *response;
+
+    request.set_block_id(id);
+    request.set_script(script);
+
+    ::grpc::Status status = stub_->ExecuteScriptAtBlockID(context, request, response);
+    if (status.ok()) {
+        return response;
+    } else {
+        return nullptr;
+    }
+}
+
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char *script, uint64_t height, const ::grpc::StubOptions& options) {
+    flow::access::ExecuteScriptAtBlockHeightRequest request;
+    flow::access::ExecuteScriptResponse *response;
+
+    request.set_block_height(height);
+    request.set_script(script);
+
+    ::grpc::Status status = stub_->ExecuteScriptAtBlockHeight(context, request, response);
+    if (status.ok()) {
+        return response;
+    } else {
+        return nullptr;
+    }
+}
+
+std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height, const ::grpc::StubOptions& options) {
+    flow::access::GetEventsForHeightRangeRequest request;
+    flow::access::EventsResponse response;
+    std::vector<::flow::access::EventsResponse_Result> events;
+
+    request.set_start_height(start_height);
+    request.set_end_height(end_height);
+
+    ::grpc::Status status = stub_->GetEventsForHeightRange(context, request, &response);
+    if (status.ok()) {
+        if (response.results_size() > 0) {
+
+            for (int idx = 0; idx < response.results_size(); idx++) {
+                events.emplace_back(response.results(idx));
+            }
+
+            return events;
+        } else {
+            return {};
+        }
+    } else {
+        return {};
+    }
+}
+
+std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const char *id, const ::grpc::StubOptions& options) {
+    flow::access::GetEventsForBlockIdsRequest request;
+    flow::access::EventsResponse response;
+    std::vector<::flow::access::EventsResponse_Result> events;
+
+    request.set_block_ids(index, id);
+
+    ::grpc::Status status = stub_->GetEventsForBlockIDs(context, request, &response);
+    if (status.ok()) {
+        if (response.results_size() > 0) {
+
+            for (int idx = 0; idx < response.results_size(); idx++) {
+                events.emplace_back(response.results(idx));
+            }
+
+            return events;
+        } else {
+            return {};
+        }
+    } else {
+        return {};
+    }
+
+}
+
+std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
+    flow::access::GetNetworkParametersRequest request;
+    flow::access::GetNetworkParametersResponse response;
+
+    ::grpc::Status status = stub_->GetNetworkParameters(context, request, &response);
+    if (status.ok()) {
+        return response.chain_id();
+    } else {
+        return nullptr;
+    }
+}
 
 int main() {
     const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
@@ -260,14 +365,22 @@ int main() {
 
     FlowClient client(channel, options);
 
-    std::cout << "=============Ping Server===========";
+    std::cout << "=============Ping Server===========" << std::endl;
     ::grpc::Status status = client.Ping(&context, options);
 
     if (status.ok()) {
-        std::cout << "Server is alive and responding" << "\n";
+        std::cout << "Server is alive and responding" << std::endl;
     } else {
-        std::cout << "Failed to ping server" << "\n";
+        std::cout << "Failed to ping server" << std::endl;
     }
 
     return 0;
 }
+
+// Handle errors in a better way. Use nullptr to initialize or make separate error types for response and status
+// Do any server method or any of data type methods such as set_id() need implementation?
+// Is a convert class needed to convert between message types? Is an entity class also needed?
+// May also implmenent async API
+// Should std::unique_ptr be used to deal with memory leaks and std:shared_ptr be used for thread safety?
+// We can choose return types and function arguments in client, so we should parse the response properly
+// before sending the result to the caller code
