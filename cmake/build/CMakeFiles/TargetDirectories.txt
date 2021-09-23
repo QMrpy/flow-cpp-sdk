@@ -1,4 +1,0 @@
-/home/rupayan178/flow-cpp-sdk/cmake/build/CMakeFiles/rebuild_cache.dir
-/home/rupayan178/flow-cpp-sdk/cmake/build/CMakeFiles/edit_cache.dir
-/home/rupayan178/flow-cpp-sdk/cmake/build/CMakeFiles/client.dir
-/home/rupayan178/flow-cpp-sdk/cmake/build/CMakeFiles/flow_grpc_proto.dir
