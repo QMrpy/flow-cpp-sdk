@@ -10,8 +10,7 @@
 #include <grpcpp/create_channel.h>
 #include <grpcpp/security/credentials.h>
 
-#include "../flow.grpc.pb.h"
-#include "../flow.pb.h"
+#include "flow.grpc.pb.h"
 
 class FlowClient {
     public:

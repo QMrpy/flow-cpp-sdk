@@ -1,0 +1,2 @@
+/usr/bin/ar qc libflow_grpc_proto.a  CMakeFiles/flow_grpc_proto.dir/flow.grpc.pb.cc.o CMakeFiles/flow_grpc_proto.dir/flow.pb.cc.o
+/usr/bin/ranlib libflow_grpc_proto.a
