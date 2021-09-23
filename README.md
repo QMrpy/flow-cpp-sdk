@@ -20,13 +20,20 @@ Flow C++ SDK For Flow Hackathon
       export PATH="$MY_INSTALL_DIR/bin:$PATH"
       ```
       
-3. Clone the project.
+3. Copy the `absl` directory to the install directory.
+
+      ```
+      cd grpc
+      sudo cp -r third_party/abseil-cpp/absl $HOME/.local/include
+      ```
+      
+4. Clone the project.
 
       ```
       git clone https://github.com/QMrpy/flow-cpp-sdk.git
       ```
       
-4. Build the Flow C++ client. Use `make` if `make -j` fails due to out of memory error. 
+5. Build the Flow C++ client. Use `make` if `make -j` fails due to out of memory error. 
 
       ```
       cd flow-cpp-sdk
