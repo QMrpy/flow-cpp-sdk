@@ -13,7 +13,7 @@ Flow C++ SDK For Flow Hackathon
       grpc==1.40.0
       ```
        
-2. Set environment variables in `~/.bashrc`. Ensure that this is the same directory used during installation of `grpc`.
+2. Set environment variables in `~/.bashrc`. Ensure that this is the same directory used during the installation of `grpc`.
 
       ```
       export MY_INSTALL_DIR=$HOME/.local
@@ -46,7 +46,7 @@ Flow C++ SDK For Flow Hackathon
       
      Currently, the `main` function is included in `client/client.cc`, to generate the `client` binary. However, this should not be the case, and it will be later removed. The `client.o` object should be linked to the `testClient` binary, so as to test the SDK on the Flow Emulator.
      
-     The above steps lead to a successful build on Ubuntu WSL2.
+     The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5.
     
        
 
