@@ -7,13 +7,13 @@ int main() {
 
     FlowClient client(channel, options);
 
-    std::cout << "=============Ping Server===========";
+    std::cout << "=============Ping Server===========" << std::endl;
     ::grpc::Status status = client.Ping(&context, options);
 
     if (status.ok()) {
-        std::cout << "Server is alive and responding" << "\n";
+        std::cout << "Server is alive and responding" << std::endl;
     } else {
-        std::cout << "Failed to ping server" << "\n";
+        std::cout << "Failed to ping server" << std::endl;
     }
 
     return 0;

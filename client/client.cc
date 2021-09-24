@@ -33,7 +33,7 @@ flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContex
 }
 
 flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::GetBlockHeaderByIdRequest request;
+    flow::access::GetBlockHeaderByIDRequest request;
     flow::access::BlockHeaderResponse response;
     flow::access::BlockHeader *block_header;
 
@@ -93,7 +93,7 @@ flow::access::Block* FlowClient::GetLatestBlock(::grpc::ClientContext* context, 
 }
 
 flow::access::Block* FlowClient::GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::GetBlockByIdRequest request;
+    flow::access::GetBlockByIDRequest request;
     flow::access::BlockResponse response;
     flow::access::Block *block;
 
@@ -133,7 +133,7 @@ flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context
 }
 
 flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::GetCollectionByIdRequest request;
+    flow::access::GetCollectionByIDRequest request;
     flow::access::CollectionResponse response;
     flow::access::Collection *collection;
 
@@ -256,7 +256,7 @@ flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::gr
     flow::access::ExecuteScriptResponse *response;
 
     request.set_script(script);
-    
+
     ::grpc::Status status = stub_->ExecuteScriptAtLatestBlock(context, request, response);
     if (status.ok()) {
         return response;
@@ -266,7 +266,7 @@ flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::gr
 }
 
 flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::ExecuteScriptAtBlockIdRequest request;
+    flow::access::ExecuteScriptAtBlockIDRequest request;
     flow::access::ExecuteScriptResponse *response;
 
     request.set_block_id(id);
@@ -321,7 +321,7 @@ std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeigh
 }
 
 std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::GetEventsForBlockIdsRequest request;
+    flow::access::GetEventsForBlockIDsRequest request;
     flow::access::EventsResponse response;
     std::vector<::flow::access::EventsResponse_Result> events;
 
@@ -370,8 +370,8 @@ std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* co
 }
 
 flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
-    flow::access::GetExecutionResultForBlockIdRequest request;
-    flow::access::ExecutionResultForBlockIdResponse response;
+    flow::access::GetExecutionResultForBlockIDRequest request;
+    flow::access::ExecutionResultForBlockIDResponse response;
     flow::access::ExecutionResult *result;
 
     request.set_block_id(id);
@@ -418,3 +418,4 @@ int main() {
 // Should std::unique_ptr be used to deal with memory leaks and std:shared_ptr be used for thread safety?
 // We can choose return types and function arguments in client, so we should parse the response properly before sending the result to the caller code
 // Write tests in separate file, main in separate file
+// Take care of overloads in request format and request methods. Can use templates for this purpose

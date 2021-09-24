@@ -1,0 +1,417 @@
+syntax = "proto3";
+
+package flow.access;
+
+option go_package = "github.com/onflow/flow/protobuf/go/flow/access";
+option java_package = "org.onflow.protobuf.access";
+
+import "google/protobuf/timestamp.proto";
+
+/* AccessAPI is the public-facing API provided by access nodes. */
+service AccessAPI {
+
+  /* Ping is used to check if the access node is alive and healthy. */
+  rpc Ping(PingRequest) returns (PingResponse);
+
+
+  /** Block Headers **/
+
+  /* GetLatestBlockHeader gets the latest sealed or unsealed block header. */
+  rpc GetLatestBlockHeader(GetLatestBlockHeaderRequest) returns (BlockHeaderResponse);
+
+  /* GetBlockHeaderByID gets a block header by ID. */
+  rpc GetBlockHeaderByID(GetBlockHeaderByIDRequest) returns (BlockHeaderResponse);
+
+  /* GetBlockHeaderByHeight gets a block header by height. */
+  rpc GetBlockHeaderByHeight(GetBlockHeaderByHeightRequest) returns (BlockHeaderResponse);
+
+
+  /** Blocks **/
+
+  /* GetLatestBlock gets the full payload of the latest sealed or unsealed block. */
+  rpc GetLatestBlock(GetLatestBlockRequest) returns (BlockResponse);
+
+  /* GetBlockByID gets a full block by ID. */
+  rpc GetBlockByID(GetBlockByIDRequest) returns (BlockResponse);
+
+  /* GetBlockByHeight gets a full block by height. */
+  rpc GetBlockByHeight(GetBlockByHeightRequest) returns (BlockResponse);
+
+
+  /** Collections **/
+
+  /* GetCollectionByID gets a collection by ID. */
+  rpc GetCollectionByID(GetCollectionByIDRequest) returns (CollectionResponse);
+
+
+  /** Transactions **/
+
+  /* SendTransaction submits a transaction to the network. */
+  rpc SendTransaction(SendTransactionRequest) returns (SendTransactionResponse);
+
+  /* GetTransaction gets a transaction by ID. */
+  rpc GetTransaction(GetTransactionRequest) returns (TransactionResponse);
+
+  /* GetTransactionResult gets the result of a transaction. */
+  rpc GetTransactionResult(GetTransactionRequest) returns (TransactionResultResponse);
+
+
+  /** Accounts **/
+
+  /* GetAccountAtLatestBlock gets an account by address from the latest sealed execution state. */
+  rpc GetAccountAtLatestBlock(GetAccountAtLatestBlockRequest) returns (AccountResponse);
+
+  /* GetAccountAtBlockHeight gets an account by address at the given block height. */
+  rpc GetAccountAtBlockHeight(GetAccountAtBlockHeightRequest) returns (AccountResponse);
+
+
+  /** Scripts **/
+
+  /* ExecuteScriptAtLatestBlock executes a read-only Cadence script against the latest sealed execution state. */
+  rpc ExecuteScriptAtLatestBlock(ExecuteScriptAtLatestBlockRequest) returns (ExecuteScriptResponse);
+
+  /* ExecuteScriptAtBlockID executes a ready-only Cadence script against the execution state at the block with the given ID. */
+  rpc ExecuteScriptAtBlockID(ExecuteScriptAtBlockIDRequest) returns (ExecuteScriptResponse);
+
+  /* ExecuteScriptAtBlockHeight executes a ready-only Cadence script against the execution state at the given block height. */
+  rpc ExecuteScriptAtBlockHeight(ExecuteScriptAtBlockHeightRequest) returns (ExecuteScriptResponse);
+
+
+  /** Events **/
+
+  /* GetEventsForHeightRange retrieves events emitted within the specified block range. */
+  rpc GetEventsForHeightRange(GetEventsForHeightRangeRequest) returns (EventsResponse);
+
+  /* GetEventsForBlockIDs retrieves events for the specified block IDs and event type. */
+  rpc GetEventsForBlockIDs(GetEventsForBlockIDsRequest) returns (EventsResponse);
+
+
+  /** NetworkParameters **/
+
+  /* GetNetworkParameters retrieves the Flow network details */
+  rpc GetNetworkParameters(GetNetworkParametersRequest) returns (GetNetworkParametersResponse);
+
+
+  /** ProtocolState **/
+
+  /** GetLatestProtocolStateSnapshot retrieves the latest sealed protocol state
+   * snapshot. Used by Flow nodes joining the network to bootstrap a
+   * space-efficient local state.
+   **/
+  rpc GetLatestProtocolStateSnapshot(GetLatestProtocolStateSnapshotRequest) returns (ProtocolStateSnapshotResponse);
+
+
+  /** Execution Results **/
+
+  /** GetExecutionResultForBlockID returns Execution Result for a given block.
+   * At present, Access Node might not have execution results for every block
+   * and as usual, until sealed, this data can change.
+   **/
+  rpc GetExecutionResultForBlockID(GetExecutionResultForBlockIDRequest) returns (ExecutionResultForBlockIDResponse);
+}
+
+message PingRequest {}
+
+message PingResponse {}
+
+/** Block Headers **/
+
+message GetLatestBlockHeaderRequest {
+  bool is_sealed = 1;
+}
+
+message GetBlockHeaderByIDRequest {
+  bytes id = 1;
+}
+
+message GetBlockHeaderByHeightRequest {
+  uint64 height = 1;
+}
+
+message BlockHeaderResponse {
+  BlockHeader block = 1;
+}
+
+/** Blocks **/
+
+message GetLatestBlockRequest {
+  bool is_sealed = 1;
+}
+
+message GetBlockByIDRequest {
+  bytes id = 1;
+}
+
+message GetBlockByHeightRequest {
+  uint64 height = 1;
+}
+
+message BlockResponse {
+  Block block = 1;
+}
+
+/** Collections **/
+
+message GetCollectionByIDRequest {
+  bytes id = 1;
+}
+
+message CollectionResponse {
+  Collection collection = 1;
+}
+
+/** Transactions **/
+
+message SendTransactionRequest {
+  Transaction transaction = 1;
+}
+
+message SendTransactionResponse {
+  bytes id = 1;
+}
+
+message GetTransactionRequest {
+  bytes id = 1;
+}
+
+message TransactionResponse {
+  Transaction transaction = 1;
+}
+
+message TransactionResultResponse {
+  TransactionStatus status = 1;
+  uint32 status_code = 2;
+  string error_message = 3;
+  repeated Event events = 4;
+  bytes block_id = 5;
+}
+
+/** Accounts **/
+
+message GetAccountRequest {
+  bytes address = 1;
+}
+
+message GetAccountResponse {
+  Account account = 1;
+}
+
+message GetAccountAtLatestBlockRequest {
+  bytes address = 1;
+}
+
+message AccountResponse {
+  Account account = 1;
+}
+
+message GetAccountAtBlockHeightRequest {
+  bytes address = 1;
+  uint64 block_height = 2;
+}
+
+/** Scripts **/
+
+message ExecuteScriptAtLatestBlockRequest {
+  bytes script = 1;
+  repeated bytes arguments = 2;
+}
+
+message ExecuteScriptAtBlockIDRequest {
+  bytes block_id = 1;
+  bytes script = 2;
+  repeated bytes arguments = 3;
+}
+
+message ExecuteScriptAtBlockHeightRequest {
+  uint64 block_height = 1;
+  bytes script = 2;
+  repeated bytes arguments = 3;
+}
+
+message ExecuteScriptResponse {
+  bytes value = 1;
+}
+
+/** Events **/
+
+message GetEventsForHeightRangeRequest {
+  string type = 1;
+  uint64 start_height = 2;
+  uint64 end_height = 3;
+}
+
+message GetEventsForBlockIDsRequest {
+  string type = 1;
+  repeated bytes block_ids = 2;
+}
+
+message EventsResponse {
+  message Result {
+    bytes block_id = 1;
+    uint64 block_height = 2;
+    repeated Event events = 3;
+    google.protobuf.Timestamp block_timestamp = 4;
+  }
+  repeated Result results = 1;
+}
+
+/** Network Parameters **/
+
+message GetNetworkParametersRequest {}
+
+message GetNetworkParametersResponse {
+  string chain_id = 1;
+}
+
+/** Protocol State **/
+
+message GetLatestProtocolStateSnapshotRequest {}
+
+message ProtocolStateSnapshotResponse {
+  bytes serializedSnapshot = 1;
+}
+
+/** Execution Results **/
+
+message GetExecutionResultForBlockIDRequest {
+  bytes block_id = 1;
+}
+
+message ExecutionResultForBlockIDResponse {
+  ExecutionResult execution_result = 1;
+}
+
+
+/** Entities **/
+
+/** Account **/
+
+message Account {
+  bytes address = 1;
+  uint64 balance = 2;
+  bytes code = 3;
+  repeated AccountKey keys = 4;
+  map<string, bytes> contracts = 5;
+}
+
+message AccountKey {
+  uint32 index = 1;
+  bytes public_key = 2;
+  uint32 sign_algo = 3;
+  uint32 hash_algo = 4;
+  uint32 weight = 5;
+  uint32 sequence_number = 6;
+  bool revoked = 7;
+}
+
+/** Block Header **/
+
+message BlockHeader {
+  bytes id = 1;
+  bytes parent_id = 2;
+  uint64 height = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+/** Collection **/
+
+message Collection {
+  bytes id = 1;
+  repeated bytes transaction_ids = 2;
+}
+
+message CollectionGuarantee {
+  bytes collection_id = 1;
+  repeated bytes signatures = 2;
+}
+
+/** Block **/
+
+message BlockSeal {
+  bytes block_id = 1;
+  bytes execution_receipt_id = 2;
+  repeated bytes execution_receipt_signatures = 3;
+  repeated bytes result_approval_signatures = 4;
+}
+
+message Block {
+  bytes id = 1;
+  bytes parent_id = 2;
+  uint64 height = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  repeated CollectionGuarantee collection_guarantees = 5;
+  repeated BlockSeal block_seals = 6;
+  repeated bytes signatures = 7;
+}
+
+/** Event **/
+
+message Event {
+  string type = 1;
+  bytes transaction_id = 2;
+  uint32 transaction_index = 3;
+  uint32 event_index = 4;
+  bytes payload = 5;
+}
+
+/** Execution Results **/
+
+message ExecutionResult {
+  bytes previous_result_id = 1;
+  bytes block_id = 2;
+  repeated Chunk chunks = 3;
+  repeated ServiceEvent service_events = 4;
+}
+
+message Chunk {
+  bytes start_state = 1;              /* state when starting executing this chunk */
+  bytes event_collection = 2;         /* Events generated by executing results */
+  bytes block_id = 3;                 /* Block id of the execution result this chunk belongs to */
+  uint64 total_computation_used = 4;  /* total amount of computation used by running all transactions in this chunk */
+  uint64 number_of_transactions = 5;  /* number of transactions inside the collection */
+  uint64 index = 6;                   /* chunk index inside the ER (starts from zero) */
+  bytes end_state = 7;                /* EndState inferred from next chunk or from the ER */
+}
+
+message ServiceEvent {
+  string type = 1;
+  bytes payload = 2;
+}
+
+/** Transaction **/
+
+enum TransactionStatus {
+  UNKNOWN = 0;
+  PENDING = 1;
+  FINALIZED = 2;
+  EXECUTED = 3;
+  SEALED = 4;
+  EXPIRED = 5;
+}
+
+message Transaction {
+  message ProposalKey {
+    bytes address = 1;
+    uint32 key_id = 2;
+    uint64 sequence_number = 3;
+  }
+
+  message Signature {
+    bytes address = 1;
+    uint32 key_id = 2;
+    bytes signature = 3;
+  }
+
+  bytes script = 1;
+  repeated bytes arguments = 2;
+  bytes reference_block_id = 3;
+  uint64 gas_limit = 4;
+  ProposalKey proposal_key = 5;
+  bytes payer = 6;
+  repeated bytes authorizers = 7;
+  repeated Signature payload_signatures = 8;
+  repeated Signature envelope_signatures = 9;
+}
+
+
+

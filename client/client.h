@@ -11,7 +11,7 @@
 #include <grpcpp/create_channel.h>
 #include <grpcpp/security/credentials.h>
 
-#include "flow.grpc.pb.h"
+#include "access.grpc.pb.h"
 
 class FlowClient {
     public:
