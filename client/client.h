@@ -35,6 +35,9 @@ class FlowClient {
         std::vector<::flow::access::EventsResponse_Result> GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height, const ::grpc::StubOptions& options);
         std::vector<::flow::access::EventsResponse_Result> GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const char *id, const ::grpc::StubOptions& options);
         std::string GetNetworkParameters(::grpc::ClientContext* context, const ::grpc::StubOptions& options);
+        std::string GetLatestProtocolStateSnapshot(::grpc::ClientContext* context, const ::grpc::StubOptions& options);
+        flow::access::ExecutionResult* ExecutionResultForBlockID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
+        ~FlowClient();
 
     private:
         std::unique_ptr<::flow::access::AccessAPI::Stub> stub_;

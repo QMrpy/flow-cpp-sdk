@@ -3,7 +3,6 @@
 FlowClient::FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) 
     : stub_(flow::access::AccessAPI::NewStub(channel, options)) {}
 
-// Verify return type
 ::grpc::Status FlowClient::Ping(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
     flow::access::PingRequest request;
     flow::access::PingResponse response;
@@ -358,6 +357,41 @@ std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context, con
     }
 }
 
+std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
+    flow::access::GetLatestProtocolStateSnapshotRequest request;
+    flow::access::ProtocolStateSnapshotResponse response;
+
+    ::grpc::Status status = stub_->GetLatestProtocolStateSnapshot(context, request, &response);
+    if (status.ok()) {
+        return response.serializedsnapshot();
+    } else {
+        return nullptr;
+    }
+}
+
+flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+    flow::access::GetExecutionResultForBlockIdRequest request;
+    flow::access::ExecutionResultForBlockIdResponse response;
+    flow::access::ExecutionResult *result;
+
+    request.set_block_id(id);
+
+    ::grpc::Status status = stub_->GetExecutionResultForBlockID(context, request, &response);
+    if (status.ok()) {
+        if (response.has_execution_result()) {
+            result = new flow::access::ExecutionResult(response.execution_result());
+            return result;
+        } else {
+            return nullptr;
+        }
+    } else {
+        return nullptr;
+    }
+}
+
+FlowClient::~FlowClient() {}
+
+
 int main() {
     const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
     const grpc::StubOptions options;
@@ -382,5 +416,5 @@ int main() {
 // Is a convert class needed to convert between message types? Is an entity class also needed?
 // May also implmenent async API
 // Should std::unique_ptr be used to deal with memory leaks and std:shared_ptr be used for thread safety?
-// We can choose return types and function arguments in client, so we should parse the response properly
-// before sending the result to the caller code
+// We can choose return types and function arguments in client, so we should parse the response properly before sending the result to the caller code
+// Write tests in separate file, main in separate file
