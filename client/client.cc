@@ -32,12 +32,16 @@ flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContex
     }
 }
 
-flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, std::variant<std::string, const char*> id, const ::grpc::StubOptions& options) {
     flow::access::GetBlockHeaderByIDRequest request;
     flow::access::BlockHeaderResponse response;
     flow::access::BlockHeader *block_header;
 
-    request.set_id(id);
+    if (std::get_if<std::string>(&id)) {
+        request.set_id(std::get<std::string>(id));
+    } else {
+        request.set_id(std::get<const char*>(id));
+    }
 
     ::grpc::Status status = stub_->GetBlockHeaderByID(context, request, &response);
     if (status.ok()) {

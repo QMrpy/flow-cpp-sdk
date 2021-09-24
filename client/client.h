@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <variant>
 
 #include <grpc/grpc.h>
 #include <grpcpp/channel.h>
@@ -18,7 +19,7 @@ class FlowClient {
         FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options);
         ::grpc::Status Ping(::grpc::ClientContext* context, const ::grpc::StubOptions& options);
         flow::access::BlockHeader* GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options);
-        flow::access::BlockHeader* GetBlockHeaderByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
+        flow::access::BlockHeader* GetBlockHeaderByID(::grpc::ClientContext* context, std::variant<std::string, const char*> id, const ::grpc::StubOptions& options);
         flow::access::BlockHeader* GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options);
         flow::access::Block* GetLatestBlock(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options);
         flow::access::Block* GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options);
