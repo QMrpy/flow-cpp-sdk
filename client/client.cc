@@ -395,16 +395,21 @@ flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::Cli
 
 FlowClient::~FlowClient() {}
 
+FlowClient* getNewClient(
+    std::shared_ptr< ::grpc::ChannelInterface> channel, 
+    grpc::StubOptions options) {
+    return new FlowClient(channel, options);
+} 
 
 int main() {
     const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
-    const grpc::StubOptions options;
-    grpc::ClientContext context;
+    const grpc::StubOptions options, newoptions;
+    grpc::ClientContext *context = new grpc::ClientContext;
 
-    FlowClient client(channel, options);
+    FlowClient *client = getNewClient(channel, options);
 
     std::cout << "=============Ping Server===========" << std::endl;
-    ::grpc::Status status = client.Ping(&context, options);
+    grpc::Status status = client->Ping(context, options);
 
     if (status.ok()) {
         std::cout << "Server is alive and responding" << std::endl;
@@ -412,6 +417,11 @@ int main() {
         std::cout << "Failed to ping server" << std::endl;
     }
 
+    new (context) grpc::ClientContext;
+    std::cout << "\n=========== GetBlockHeaderByID ================\n";
+    auto blockHeader = client->GetBlockHeaderByID(context, "7bc42fe85d32ca513769a74f97f7e1a7bad6c9407f0d934c2aa645ef9cf613c7", options);
+    std::cout << "Block Header ID " << std::endl;
+    std::cout << blockHeader;
     return 0;
 }
 
