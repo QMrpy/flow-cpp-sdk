@@ -392,53 +392,6 @@ flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::Cli
 FlowClient::~FlowClient() {}
 
 
-int main() {
-    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("access.mainnet.nodes.onflow.org:9000", grpc::InsecureChannelCredentials());
-    const grpc::StubOptions options;
-    grpc::ClientContext *context = new grpc::ClientContext();
-
-    FlowClient client(channel, options);
-
-    std::cout << "=============Ping Server===========" << std::endl;
-    ::grpc::Status status = client.Ping(context);
-
-    if (status.ok()) {
-        std::cout << "Server is alive and responding" << std::endl;
-    } else {
-        std::cout << "Failed to ping server" << std::endl;
-    }
-
-    new (context) grpc::ClientContext;
-    //grpc::ClientContext context2;
-    std::cout << "\n=========== GetLatestBlock ================\n";
-    flow::access::Block* block = client.GetLatestBlock(context, true);
-    std::cout << "Block ID " << std::endl;
-    for(int i =0; i < block->id().size(); i++)
-    {
-        std::cout << std::setw(2) << std::setfill('0') << std::hex << (uint16_t(block->id()[i]) & 0xff);
-    }
-    std::cout<<"\n";
-    std::cout<< std::dec <<  block->height() << "\n";
-
-    new (context) grpc::ClientContext;
-    //grpc::ClientContext context3;
-    std::cout << "++++++++++++GetBlockByID++++++++++\n";
-    flow::access::Block* blockID = client.GetBlockByID(context, block->id());
-    std::cout << "Height from BlockByID\n";
-    std::cout << blockID->height() << "\n"; 
-    //std::cout << "Block ID " << std::endl;
-    //std::cout << blockID->id();
-
-    new (context) grpc::ClientContext;
-    //grpc::ClientContext context4;
-    std::cout << "+=====================GetBlockHeaderByID=============\n";
-    flow::access::BlockHeader* blockheader = client.GetBlockHeaderByID(context, block->id());
-    std::cout << "height from blockheaderbyID\n";
-    std::cout << blockheader->height() << "\n";
-
-    return 0;
-}
-
 // Handle errors in a better way. Use nullptr to initialize or make separate error types for response and status
 // Do any server method or any of data type methods such as set_id() need implementation?
 // Is a convert class needed to convert between message types? Is an entity class also needed?
@@ -447,3 +400,4 @@ int main() {
 // We can choose return types and function arguments in client, so we should parse the response properly before sending the result to the caller code
 // Write tests in separate file, main in separate file
 // Take care of overloads in request format and request methods. Can use templates for this purpose
+// Handle destruction, cleaning of objects and memory leaks
