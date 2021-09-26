@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <assert.h>
 
 #include <grpc/grpc.h>
 #include <grpcpp/channel.h>

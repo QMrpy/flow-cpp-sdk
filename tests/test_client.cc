@@ -1,8 +1,9 @@
 #include "../client/client.h"
 #include "../convert/convert.h"
+#include <assert.h>
 
 int main() {
-    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("access.mainnet.nodes.onflow.org:9000", grpc::InsecureChannelCredentials());
+    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
     const grpc::StubOptions options;
 
     FlowClient client(channel, options);
