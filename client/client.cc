@@ -3,7 +3,7 @@
 FlowClient::FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) 
     : stub_(flow::access::AccessAPI::NewStub(channel, options)) {}
 
-::grpc::Status FlowClient::Ping(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
+::grpc::Status FlowClient::Ping(::grpc::ClientContext* context) {
     flow::access::PingRequest request;
     flow::access::PingResponse response;
 
@@ -12,7 +12,7 @@ FlowClient::FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel
     return status;
 }
 
-flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
+flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed) {
     flow::access::GetLatestBlockHeaderRequest request;
     flow::access::BlockHeaderResponse response;
     flow::access::BlockHeader *block_header;
@@ -32,16 +32,12 @@ flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContex
     }
 }
 
-flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, std::variant<std::string, const char*> id, const ::grpc::StubOptions& options) {
+flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetBlockHeaderByIDRequest request;
     flow::access::BlockHeaderResponse response;
     flow::access::BlockHeader *block_header;
 
-    if (std::get_if<std::string>(&id)) {
-        request.set_id(std::get<std::string>(id));
-    } else {
-        request.set_id(std::get<const char*>(id));
-    }
+    request.set_id(id);
 
     ::grpc::Status status = stub_->GetBlockHeaderByID(context, request, &response);
     if (status.ok()) {
@@ -56,7 +52,7 @@ flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext*
     }
 }
 
-flow::access::BlockHeader* FlowClient::GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
+flow::access::BlockHeader* FlowClient::GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height) {
     flow::access::GetBlockHeaderByHeightRequest request;
     flow::access::BlockHeaderResponse response;
     flow::access::BlockHeader *block_header;
@@ -76,7 +72,7 @@ flow::access::BlockHeader* FlowClient::GetBlockHeaderByHeight(::grpc::ClientCont
     }
 }
 
-flow::access::Block* FlowClient::GetLatestBlock(::grpc::ClientContext* context, bool is_sealed, const ::grpc::StubOptions& options) {
+flow::access::Block* FlowClient::GetLatestBlock(::grpc::ClientContext* context, bool is_sealed) {
     flow::access::GetLatestBlockRequest request;
     flow::access::BlockResponse response;
     flow::access::Block *block;
@@ -96,7 +92,7 @@ flow::access::Block* FlowClient::GetLatestBlock(::grpc::ClientContext* context, 
     }
 }
 
-flow::access::Block* FlowClient::GetBlockByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+flow::access::Block* FlowClient::GetBlockByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetBlockByIDRequest request;
     flow::access::BlockResponse response;
     flow::access::Block *block;
@@ -116,7 +112,7 @@ flow::access::Block* FlowClient::GetBlockByID(::grpc::ClientContext* context, co
     }
 }
 
-flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context, uint64_t height, const ::grpc::StubOptions& options) {
+flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context, uint64_t height) {
     flow::access::GetBlockByHeightRequest request;
     flow::access::BlockResponse response;
     flow::access::Block *block;
@@ -136,7 +132,7 @@ flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context
     }
 }
 
-flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetCollectionByIDRequest request;
     flow::access::CollectionResponse response;
     flow::access::Collection *collection;
@@ -156,7 +152,7 @@ flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* c
     }
 }
 
-flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction, const ::grpc::StubOptions& options) {
+flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction) {
     flow::access::SendTransactionRequest request;
     flow::access::SendTransactionResponse *response;
 
@@ -170,7 +166,7 @@ flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::Clien
     }
 }
 
-flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetTransactionRequest request;
     flow::access::TransactionResponse response;
     flow::access::Transaction *transaction;
@@ -190,7 +186,7 @@ flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* con
     }
 }
 
-std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetTransactionRequest request;
     flow::access::TransactionResultResponse response;
     std::vector<::flow::access::Event> results;
@@ -214,7 +210,7 @@ std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::Clie
     }
 }
 
-flow::access::Account* FlowClient::GetAccountAtLatestBlock(::grpc::ClientContext* context, const char *address, const ::grpc::StubOptions& options) {
+flow::access::Account* FlowClient::GetAccountAtLatestBlock(::grpc::ClientContext* context, const std::string& address) {
     flow::access::GetAccountAtLatestBlockRequest request;
     flow::access::AccountResponse response;
     flow::access::Account *account;
@@ -234,7 +230,7 @@ flow::access::Account* FlowClient::GetAccountAtLatestBlock(::grpc::ClientContext
     }
 }
 
-flow::access::Account* FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext* context, const char *address, uint64_t height, const ::grpc::StubOptions& options) {
+flow::access::Account* FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext* context, const std::string& address, uint64_t height) {
     flow::access::GetAccountAtBlockHeightRequest request;
     flow::access::AccountResponse response;
     flow::access::Account *account;
@@ -255,7 +251,7 @@ flow::access::Account* FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext
     }
 }
 
-flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char *script, const ::grpc::StubOptions& options) {
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char *script) {
     flow::access::ExecuteScriptAtLatestBlockRequest request;
     flow::access::ExecuteScriptResponse *response;
 
@@ -269,7 +265,7 @@ flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::gr
     }
 }
 
-flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const char *id, const ::grpc::StubOptions& options) {
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const std::string& id) {
     flow::access::ExecuteScriptAtBlockIDRequest request;
     flow::access::ExecuteScriptResponse *response;
 
@@ -284,7 +280,7 @@ flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockID(::grpc::
     }
 }
 
-flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char *script, uint64_t height, const ::grpc::StubOptions& options) {
+flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char *script, uint64_t height) {
     flow::access::ExecuteScriptAtBlockHeightRequest request;
     flow::access::ExecuteScriptResponse *response;
 
@@ -299,7 +295,7 @@ flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtBlockHeight(::gr
     }
 }
 
-std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height, const ::grpc::StubOptions& options) {
+std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height) {
     flow::access::GetEventsForHeightRangeRequest request;
     flow::access::EventsResponse response;
     std::vector<::flow::access::EventsResponse_Result> events;
@@ -324,7 +320,7 @@ std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeigh
     }
 }
 
-std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const char *id, const ::grpc::StubOptions& options) {
+std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const std::string& id) {
     flow::access::GetEventsForBlockIDsRequest request;
     flow::access::EventsResponse response;
     std::vector<::flow::access::EventsResponse_Result> events;
@@ -349,7 +345,7 @@ std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlock
 
 }
 
-std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
+std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context) {
     flow::access::GetNetworkParametersRequest request;
     flow::access::GetNetworkParametersResponse response;
 
@@ -361,7 +357,7 @@ std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context, con
     }
 }
 
-std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* context, const ::grpc::StubOptions& options) {
+std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* context) {
     flow::access::GetLatestProtocolStateSnapshotRequest request;
     flow::access::ProtocolStateSnapshotResponse response;
 
@@ -373,7 +369,7 @@ std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* co
     }
 }
 
-flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const char *id, const ::grpc::StubOptions& options) {
+flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetExecutionResultForBlockIDRequest request;
     flow::access::ExecutionResultForBlockIDResponse response;
     flow::access::ExecutionResult *result;
@@ -397,20 +393,46 @@ FlowClient::~FlowClient() {}
 
 
 int main() {
-    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
+    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("access.mainnet.nodes.onflow.org:9000", grpc::InsecureChannelCredentials());
     const grpc::StubOptions options;
     grpc::ClientContext context;
 
     FlowClient client(channel, options);
 
     std::cout << "=============Ping Server===========" << std::endl;
-    ::grpc::Status status = client.Ping(&context, options);
+    ::grpc::Status status = client.Ping(&context);
 
     if (status.ok()) {
         std::cout << "Server is alive and responding" << std::endl;
     } else {
         std::cout << "Failed to ping server" << std::endl;
     }
+
+    //new (context) grpc::ClientContext;
+    grpc::ClientContext context2;
+    std::cout << "\n=========== GetLatestBlock ================\n";
+    flow::access::Block* block = client.GetLatestBlock(&context2, true);
+    std::cout << "Block ID " << std::endl;
+    for(int i =0; i < block->id().size(); i++)
+    {
+        std::cout << std::setw(2) << std::setfill('0') << std::hex << (uint16_t(block->id()[i]) & 0xff);
+    }
+    std::cout<<"\n";
+    std::cout<< std::dec <<  block->height() << "\n";
+
+    grpc::ClientContext context3;
+    std::cout << "++++++++++++GetBlockByID++++++++++\n";
+    flow::access::Block* blockID = client.GetBlockByID(&context3, block->id());
+    std::cout << "Height from BlockByID\n";
+    std::cout << blockID->height() << "\n"; 
+    //std::cout << "Block ID " << std::endl;
+    //std::cout << blockID->id();
+
+    grpc::ClientContext context4;
+    std::cout << "+=====================GetBlockHeaderByID=============\n";
+    flow::access::BlockHeader* blockheader = client.GetBlockHeaderByID(&context4, block->id());
+    std::cout << "height from blockheaderbyID\n";
+    std::cout << blockheader->height() << "\n";
 
     return 0;
 }
