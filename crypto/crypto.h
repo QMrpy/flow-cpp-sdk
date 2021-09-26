@@ -1,3 +1,6 @@
+#ifndef CRYPTO_H
+#define CRYPTO_H
+
 #include <iostream>
 #include <string>
 #include <iomanip>
@@ -8,16 +11,18 @@
 
 class HashAlgorithm {
     HashAlgorithm();
-    std::string sha2_256(std::string& message);
-    std::string sha2_384(std::string& message);
-    std::string sha3_256(std::string& message);
-    std::string sha3_384(std::string& message);
+    std::string sha2_256(const std::string& message);
+    std::string sha2_384(const std::string& message);
+    std::string sha3_256(const std::string& message);
+    std::string sha3_384(const std::string& message);
     ~HashAlgorithm();
 };
 
 class SignatureAlgorithm {
     public:
         SignatureAlgorithm();
-        const BIGNUM* generatePrivateKey(std::string SignatureAlgorithmName);
+        const BIGNUM* generatePrivateKey(const std::string SignatureAlgorithmName);
         ~SignatureAlgorithm();
 };
+
+#endif

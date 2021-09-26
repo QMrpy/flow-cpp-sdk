@@ -2,7 +2,7 @@
 
 SignatureAlgorithm::SignatureAlgorithm() {}
 
-const BIGNUM* SignatureAlgorithm::generatePrivateKey(std::string SignatureAlgorithmName) {
+const BIGNUM* SignatureAlgorithm::generatePrivateKey(const std::string SignatureAlgorithmName) {
     EC_KEY *ec_key;
     const BIGNUM* private_key;
 
