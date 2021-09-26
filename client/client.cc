@@ -395,12 +395,12 @@ FlowClient::~FlowClient() {}
 int main() {
     const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("access.mainnet.nodes.onflow.org:9000", grpc::InsecureChannelCredentials());
     const grpc::StubOptions options;
-    grpc::ClientContext context;
+    grpc::ClientContext *context = new grpc::ClientContext();
 
     FlowClient client(channel, options);
 
     std::cout << "=============Ping Server===========" << std::endl;
-    ::grpc::Status status = client.Ping(&context);
+    ::grpc::Status status = client.Ping(context);
 
     if (status.ok()) {
         std::cout << "Server is alive and responding" << std::endl;
@@ -408,10 +408,10 @@ int main() {
         std::cout << "Failed to ping server" << std::endl;
     }
 
-    //new (context) grpc::ClientContext;
-    grpc::ClientContext context2;
+    new (context) grpc::ClientContext;
+    //grpc::ClientContext context2;
     std::cout << "\n=========== GetLatestBlock ================\n";
-    flow::access::Block* block = client.GetLatestBlock(&context2, true);
+    flow::access::Block* block = client.GetLatestBlock(context, true);
     std::cout << "Block ID " << std::endl;
     for(int i =0; i < block->id().size(); i++)
     {
@@ -420,17 +420,19 @@ int main() {
     std::cout<<"\n";
     std::cout<< std::dec <<  block->height() << "\n";
 
-    grpc::ClientContext context3;
+    new (context) grpc::ClientContext;
+    //grpc::ClientContext context3;
     std::cout << "++++++++++++GetBlockByID++++++++++\n";
-    flow::access::Block* blockID = client.GetBlockByID(&context3, block->id());
+    flow::access::Block* blockID = client.GetBlockByID(context, block->id());
     std::cout << "Height from BlockByID\n";
     std::cout << blockID->height() << "\n"; 
     //std::cout << "Block ID " << std::endl;
     //std::cout << blockID->id();
 
-    grpc::ClientContext context4;
+    new (context) grpc::ClientContext;
+    //grpc::ClientContext context4;
     std::cout << "+=====================GetBlockHeaderByID=============\n";
-    flow::access::BlockHeader* blockheader = client.GetBlockHeaderByID(&context4, block->id());
+    flow::access::BlockHeader* blockheader = client.GetBlockHeaderByID(context, block->id());
     std::cout << "height from blockheaderbyID\n";
     std::cout << blockheader->height() << "\n";
 
