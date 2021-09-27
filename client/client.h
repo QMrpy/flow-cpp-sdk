@@ -29,9 +29,9 @@ class FlowClient {
         std::vector<::flow::access::Event> GetTransactionResult(::grpc::ClientContext* context, const std::string& id);
         flow::access::Account* GetAccountAtLatestBlock(::grpc::ClientContext* context, const std::string& address);
         flow::access::Account* GetAccountAtBlockHeight(::grpc::ClientContext* context, const std::string& address, uint64_t height);
-        flow::access::ExecuteScriptResponse* ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char *script);
-        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char *script, const std::string& id);
-        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char *script, uint64_t height);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char* script);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockID(::grpc::ClientContext* context, const char* script, const std::string& id);
+        flow::access::ExecuteScriptResponse* ExecuteScriptAtBlockHeight(::grpc::ClientContext* context, const char* script, uint64_t height);
         std::vector<::flow::access::EventsResponse_Result> GetEventsForHeightRange(::grpc::ClientContext* context, uint64_t start_height, uint64_t end_height);
         std::vector<::flow::access::EventsResponse_Result> GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const std::string& id);
         std::string GetNetworkParameters(::grpc::ClientContext* context);

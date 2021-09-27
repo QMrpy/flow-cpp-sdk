@@ -8,7 +8,7 @@ include(./cmake-commons/common.cmake)
 get_filename_component(access_proto "./proto/access.proto" ABSOLUTE)
 get_filename_component(access_proto_path "${access_proto}" PATH)
 
-# Generated proto sources
+# access_grpc_proto sources
 set(access_proto_srcs "${CMAKE_CURRENT_BINARY_DIR}/access.pb.cc")
 set(access_proto_hdrs "${CMAKE_CURRENT_BINARY_DIR}/access.pb.h")
 set(access_grpc_srcs "${CMAKE_CURRENT_BINARY_DIR}/access.grpc.pb.cc")
