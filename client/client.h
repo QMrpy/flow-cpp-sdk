@@ -16,6 +16,8 @@
 class FlowClient {
     public:
         FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options);
+        
+        /** Synchronous API **/
         ::grpc::Status Ping(::grpc::ClientContext* context);
         flow::access::BlockHeader* GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed);
         flow::access::BlockHeader* GetBlockHeaderByID(::grpc::ClientContext* context, const std::string& id);
@@ -37,6 +39,7 @@ class FlowClient {
         std::string GetNetworkParameters(::grpc::ClientContext* context);
         std::string GetLatestProtocolStateSnapshot(::grpc::ClientContext* context);
         flow::access::ExecutionResult* ExecutionResultForBlockID(::grpc::ClientContext* context, const std::string& id);
+        
         ~FlowClient();
 
     private:

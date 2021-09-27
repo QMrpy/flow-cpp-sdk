@@ -60,12 +60,59 @@ target_link_libraries(client
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-# Target test_client main executable
-add_executable(test_client "./tests/test_client.cc")
-target_link_libraries(test_client
+# Async Client sources
+set(async_client_srcs "${CMAKE_CURRENT_BINARY_DIR}/../../client/client_async.cc")
+set(async_client_hdrs "${CMAKE_CURRENT_BINARY_DIR}/../../client/client_async.h")
+
+# async_client object
+add_library(async_client
+  ${async_client_srcs}
+  ${async_client_hdrs})
+target_link_libraries(async_client
   access_grpc_proto
+  ${_REFLECTION}
+  ${_GRPC_GRPCPP}
+  ${_PROTOBUF_LIBPROTOBUF})
+
+# Test Client sources
+set(test_client_srcs "${CMAKE_CURRENT_BINARY_DIR}/../../tests/test_client.cc")
+set(test_client_hdrs "${CMAKE_CURRENT_BINARY_DIR}/../../tests/test_client.h")
+
+# test_client object
+add_library(test_client
+  ${test_client_srcs}
+  ${test_client_hdrs})
+target_link_libraries(test_client
   client
   convert
+  ${_REFLECTION}
+  ${_GRPC_GRPCPP}
+  ${_PROTOBUF_LIBPROTOBUF})
+
+# Test Async Client sources
+set(test_async_client_srcs "${CMAKE_CURRENT_BINARY_DIR}/../../tests/test_async_client.cc")
+set(test_async_client_hdrs "${CMAKE_CURRENT_BINARY_DIR}/../../tests/test_async_client.h")
+
+# test_async_client object
+add_library(test_async_client
+  ${test_async_client_srcs}
+  ${test_async_client_hdrs})
+target_link_libraries(test_async_client
+  async_client
+  convert
+  ${_REFLECTION}
+  ${_GRPC_GRPCPP}
+  ${_PROTOBUF_LIBPROTOBUF})
+
+# Target main executable
+add_executable(main "./main.cc")
+target_link_libraries(main
+  test_client
+  client
+  test_async_client
+  async_client
+  convert
+  access_grpc_proto
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})

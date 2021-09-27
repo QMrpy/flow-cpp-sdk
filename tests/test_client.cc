@@ -1,11 +1,6 @@
-#include "../client/client.h"
-#include "../convert/convert.h"
-#include <assert.h>
+#include "test_client.h"
 
-int main() {
-    const std::shared_ptr< ::grpc::ChannelInterface> channel = grpc::CreateChannel("127.0.0.1:3569", grpc::InsecureChannelCredentials());
-    const grpc::StubOptions options;
-
+void test_client(const std::shared_ptr< ::grpc::ChannelInterface> channel, const grpc::StubOptions& options) {
     FlowClient client(channel, options);
 
     /** Test Ping **/
@@ -65,6 +60,4 @@ int main() {
     } else {
         std::cout << "Failed to retrieve block header by ID." << std::endl;
     }
-
-    return 0;
 }
