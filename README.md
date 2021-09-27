@@ -46,7 +46,11 @@ Flow C++ SDK For Flow Hackathon
      
      The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5.
 
-6. Run the binary `test_client`, located in `cmake/build`
+6. Run the binary `main`, using the URL of the `host` Flow network.
+
+      ```
+      ./main <host>[flow-emulator|flow-mainnet|flow-testnet]
+      ```
     
        
 
