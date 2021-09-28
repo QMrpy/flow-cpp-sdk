@@ -72,5 +72,3 @@ int AsyncFlowClient::AsyncGetLatestBlock(bool is_sealed) {
     return 0;
 }
 
-
-// How to prove that the calls are truly asynchronous?
