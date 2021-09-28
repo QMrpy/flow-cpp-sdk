@@ -11,6 +11,7 @@ Flow C++ SDK For Flow Hackathon
       cmake==3.16.3
       protobuf==3.15.8
       grpc==1.40.0
+      OpenSSL 1.1.1l
       ```
        
 2. Set environment variables in `~/.bashrc`. Ensure that this is the same directory used during the installation of `grpc`.
@@ -41,12 +42,15 @@ Flow C++ SDK For Flow Hackathon
       pushd cmake/build
       cmake -DCMAKE_PREFIX_PATH=$MY_INSTALL_DIR ../..
       make -j
-      popd
       ```
-      
-     Currently, the `main` function is included in `client/client.cc`, to generate the `client` binary. However, this should not be the case, and it will be later removed. The `client.o` object should be linked to the `testClient` binary, so as to test the SDK on the Flow Emulator.
      
      The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5.
+
+6. Run the binary `main`, using the URL of the `host` Flow network.
+
+      ```
+      ./main <host>[flow-emulator|flow-mainnet|flow-testnet]
+      ```
     
        
 
