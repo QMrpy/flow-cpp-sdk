@@ -29,8 +29,6 @@ const BIGNUM* SignatureAlgorithm::generatePrivateKey(const std::string signature
     }
 }
 
-SignatureAlgorithm::~SignatureAlgorithm() {}
-
 
 /** HashAlgorithm **/
 
@@ -86,5 +84,3 @@ std::string HashAlgorithm::string_from_raw_bytes(const std::vector<uint8_t>& byt
     }
     return stream.str();
 }
-
-HashAlgorithm::~HashAlgorithm() {}
