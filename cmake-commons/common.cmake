@@ -16,6 +16,10 @@ cmake_minimum_required(VERSION 3.5.1)
 
 set (CMAKE_CXX_STANDARD 17)
 
+set(_THREADS pthread)
+set(_SSL ssl)
+set(_CRYPTO crypto)
+
 if(MSVC)
   add_definitions(-D_WIN32_WINNT=0x600)
 endif()

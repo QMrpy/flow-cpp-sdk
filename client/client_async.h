@@ -4,6 +4,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <condition_variable>
+#include <mutex>
 
 #include <grpc/grpc.h>
 #include <grpcpp/grpcpp.h>
@@ -12,6 +14,7 @@
 #include <grpcpp/create_channel.h>
 #include <grpcpp/security/credentials.h>
 
+#include "../convert/convert.h"
 #include "access.grpc.pb.h"
 
 class AsyncFlowClient {
@@ -19,10 +22,8 @@ class AsyncFlowClient {
         AsyncFlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options);
         
         /** Asynchronous API **/
-        ::grpc::Status AsyncPing(::grpc::ClientContext* context);
-        flow::access::Block* AsyncGetLatestBlock(::grpc::ClientContext* context, bool is_sealed);
-
-        ~AsyncFlowClient();
+        int AsyncPing();
+        int AsyncGetLatestBlock(bool is_sealed);
 
     private:
         std::unique_ptr<::flow::access::AccessAPI::Stub> stub_;

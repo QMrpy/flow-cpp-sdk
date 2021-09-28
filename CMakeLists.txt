@@ -100,6 +100,7 @@ add_library(test_async_client
 target_link_libraries(test_async_client
   async_client
   convert
+  ${_THREADS}
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})

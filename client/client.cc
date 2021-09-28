@@ -389,17 +389,10 @@ flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::Cli
     }
 }
 
-FlowClient::~FlowClient() {}
-
 
 // Handle errors in a better way. Use nullptr to initialize or make separate error types for response and status
-// Do any server method or any of data type methods such as set_id() need implementation?
-// Is a convert class needed to convert between message types? Is an entity class also needed?
-// May also implmenent async API
 // Should std::unique_ptr be used to deal with memory leaks and std:shared_ptr be used for thread safety?
 // We can choose return types and function arguments in client, so we should parse the response properly before sending the result to the caller code
-// Write tests in separate file, main in separate file
 // Take care of overloads in request format and request methods. Can use templates for this purpose
 // Handle destruction, cleaning of objects and memory leaks
 // Implement another layer of client operations, which will contain sync and async calls, and services such as create account, etc. Will use the crypto module
-// Accept mainnet, emulator or testnet host as command line arguments

@@ -39,8 +39,6 @@ class FlowClient {
         std::string GetNetworkParameters(::grpc::ClientContext* context);
         std::string GetLatestProtocolStateSnapshot(::grpc::ClientContext* context);
         flow::access::ExecutionResult* ExecutionResultForBlockID(::grpc::ClientContext* context, const std::string& id);
-        
-        ~FlowClient();
 
     private:
         std::unique_ptr<::flow::access::AccessAPI::Stub> stub_;
