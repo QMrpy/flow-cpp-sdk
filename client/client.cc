@@ -92,44 +92,36 @@ std::unique_ptr<flow::access::Block> FlowClient::GetBlockByID(::grpc::ClientCont
     return block;
 }
 
-flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context, uint64_t height) {
+std::unique_ptr<flow::access::Block> FlowClient::GetBlockByHeight(::grpc::ClientContext* context, uint64_t height) {
     flow::access::GetBlockByHeightRequest request;
     flow::access::BlockResponse response;
-    flow::access::Block* block;
+    std::unique_ptr<flow::access::Block> block;
 
     request.set_height(height);
 
     ::grpc::Status status = stub_->GetBlockByHeight(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block = new flow::access::Block(response.block());
-            return block;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block()) 
+            block = std::make_unique<flow::access::Block>(response.block());
     }
+
+    return block;
 }
 
-flow::access::Collection* FlowClient::GetCollectionByID(::grpc::ClientContext* context, const std::string& id) {
+std::unique_ptr<flow::access::Collection> FlowClient::GetCollectionByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetCollectionByIDRequest request;
     flow::access::CollectionResponse response;
-    flow::access::Collection* collection;
+    std::unique_ptr<flow::access::Collection> collection;
 
     request.set_id(id);
 
     ::grpc::Status status = stub_->GetCollectionByID(context, request, &response);
     if (status.ok()) {
-        if (response.has_collection()) {
-            collection = new flow::access::Collection(response.collection());
-            return collection;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_collection())
+            collection = std::make_unique<flow::access::Collection>(response.collection());
     }
+
+    return collection;
 }
 
 flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::ClientContext* context, flow::access::Transaction* transaction) {
@@ -146,24 +138,20 @@ flow::access::SendTransactionResponse* FlowClient::SendTransaction(::grpc::Clien
     }
 }
 
-flow::access::Transaction* FlowClient::GetTransaction(::grpc::ClientContext* context, const std::string& id) {
+std::unique_ptr<flow::access::Transaction> FlowClient::GetTransaction(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetTransactionRequest request;
     flow::access::TransactionResponse response;
-    flow::access::Transaction* transaction;
+    std::unique_ptr<flow::access::Transaction> transaction;
 
     request.set_id(id);
 
     ::grpc::Status status = stub_->GetTransaction(context, request, &response);
     if (status.ok()) {
-        if (response.has_transaction()) {
-            transaction = new flow::access::Transaction(response.transaction());
-            return transaction;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_transaction())
+            transaction = std::make_unique<flow::access::Transaction>(response.transaction());
     }
+
+    return transaction;
 }
 
 std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::ClientContext* context, const std::string& id) {
@@ -176,59 +164,47 @@ std::vector<::flow::access::Event> FlowClient::GetTransactionResult(::grpc::Clie
     ::grpc::Status status = stub_->GetTransactionResult(context, request, &response);
     if (status.ok()) {
         if (response.events_size() > 0) {
-            
-            for (int idx = 0; idx < response.events_size(); idx++) {
-                results.emplace_back(response.events(idx));
-            }
 
-            return results;
-        } else {
-            return {};
+            for (int idx = 0; idx < response.events_size(); idx++)
+                results.emplace_back(response.events(idx));
         }
-    } else {
-        return {};
     }
+
+    return results;
 }
 
-flow::access::Account* FlowClient::GetAccountAtLatestBlock(::grpc::ClientContext* context, const std::string& address) {
+std::unique_ptr<flow::access::Account> FlowClient::GetAccountAtLatestBlock(::grpc::ClientContext* context, const std::string& address) {
     flow::access::GetAccountAtLatestBlockRequest request;
     flow::access::AccountResponse response;
-    flow::access::Account* account;
+    std::unique_ptr<flow::access::Account> account;
 
     request.set_address(address);
 
     ::grpc::Status status = stub_->GetAccountAtLatestBlock(context, request, &response);
     if (status.ok()) {
-        if (response.has_account()) {
-            account = new flow::access::Account(response.account());
-            return account;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_account())
+            account = std::make_unique<flow::access::Account>(response.account());
     }
+    
+    return account;
 }
 
-flow::access::Account* FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext* context, const std::string& address, uint64_t height) {
+std::unique_ptr<flow::access::Account> FlowClient::GetAccountAtBlockHeight(::grpc::ClientContext* context, const std::string& address, uint64_t height) {
     flow::access::GetAccountAtBlockHeightRequest request;
     flow::access::AccountResponse response;
-    flow::access::Account* account;
+    std::unique_ptr<flow::access::Account> account;
 
     request.set_address(address);
     request.set_block_height(height);
 
     ::grpc::Status status = stub_->GetAccountAtBlockHeight(context, request, &response);
     if (status.ok()) {
-        if (response.has_account()) {
-            account = new flow::access::Account(response.account());
-            return account;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_account())
+            account = std::make_unique<flow::access::Account>(response.account());
     }
+
+    return account;
+    
 }
 
 flow::access::ExecuteScriptResponse* FlowClient::ExecuteScriptAtLatestBlock(::grpc::ClientContext* context, const char* script) {
@@ -287,17 +263,12 @@ std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForHeigh
     if (status.ok()) {
         if (response.results_size() > 0) {
 
-            for (int idx = 0; idx < response.results_size(); idx++) {
+            for (int idx = 0; idx < response.results_size(); idx++)
                 events.emplace_back(response.results(idx));
-            }
-
-            return events;
-        } else {
-            return {};
         }
-    } else {
-        return {};
     }
+
+    return events;
 }
 
 std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlockIDs(::grpc::ClientContext* context, int index, const std::string& id) {
@@ -311,18 +282,12 @@ std::vector<::flow::access::EventsResponse_Result> FlowClient::GetEventsForBlock
     if (status.ok()) {
         if (response.results_size() > 0) {
 
-            for (int idx = 0; idx < response.results_size(); idx++) {
+            for (int idx = 0; idx < response.results_size(); idx++)
                 events.emplace_back(response.results(idx));
-            }
-
-            return events;
-        } else {
-            return {};
         }
-    } else {
-        return {};
     }
 
+    return events;
 }
 
 std::string FlowClient::GetNetworkParameters(::grpc::ClientContext* context) {
@@ -349,24 +314,20 @@ std::string FlowClient::GetLatestProtocolStateSnapshot(::grpc::ClientContext* co
     }
 }
 
-flow::access::ExecutionResult* FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const std::string& id) {
+std::unique_ptr<flow::access::ExecutionResult> FlowClient::ExecutionResultForBlockID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetExecutionResultForBlockIDRequest request;
     flow::access::ExecutionResultForBlockIDResponse response;
-    flow::access::ExecutionResult* result;
+    std::unique_ptr<flow::access::ExecutionResult> result;
 
     request.set_block_id(id);
 
     ::grpc::Status status = stub_->GetExecutionResultForBlockID(context, request, &response);
     if (status.ok()) {
-        if (response.has_execution_result()) {
-            result = new flow::access::ExecutionResult(response.execution_result());
-            return result;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_execution_result())
+            result = std::make_unique<flow::access:ExecutionResult>(response.execution_result());
     }
+            
+    return result;
 }
 
 

@@ -19,7 +19,7 @@ void test_client(const std::shared_ptr< ::grpc::ChannelInterface> channel, const
     new (context) grpc::ClientContext;
     std::cout << std::endl << "GetLatestBlock" << std::endl;
     std::cout << "-----------------------------------------------" << std::endl;
-    flow::access::Block* latest_block = client.GetLatestBlock(context, true);
+    std::unique_ptr<flow::access::Block> latest_block = client.GetLatestBlock(context, true);
 
     if (latest_block) {
         std::cout << "Block ID: " << ConvertResponse().get_sha256_from_raw_bytes(latest_block->id()) << std::endl;
@@ -34,7 +34,7 @@ void test_client(const std::shared_ptr< ::grpc::ChannelInterface> channel, const
     new (context) grpc::ClientContext;
     std::cout << std::endl << "GetBlockByID" << std::endl;
     std::cout << "-----------------------------------------------" << std::endl;
-    flow::access::Block* block_by_id = client.GetBlockByID(context, latest_block->id());
+    std::unique_ptr<flow::access::Block> block_by_id = client.GetBlockByID(context, latest_block->id());
     
     if (block_by_id) {
         std::cout << "Block ID: " << ConvertResponse().get_sha256_from_raw_bytes(block_by_id->id()) << std::endl;
@@ -50,7 +50,7 @@ void test_client(const std::shared_ptr< ::grpc::ChannelInterface> channel, const
     new (context) grpc::ClientContext;
     std::cout << std::endl << "GetBlockHeaderByID" << std::endl;
     std::cout << "-----------------------------------------------" << std::endl;
-    flow::access::BlockHeader* blockheader_by_id = client.GetBlockHeaderByID(context, latest_block->id());
+    std::unique_ptr<flow::access::BlockHeader> blockheader_by_id = client.GetBlockHeaderByID(context, latest_block->id());
 
     if (block_by_id) {
         std::cout << "Block ID: " << ConvertResponse().get_sha256_from_raw_bytes(blockheader_by_id->id()) << std::endl;
