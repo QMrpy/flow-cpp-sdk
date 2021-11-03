@@ -324,7 +324,7 @@ std::unique_ptr<flow::access::ExecutionResult> FlowClient::ExecutionResultForBlo
     ::grpc::Status status = stub_->GetExecutionResultForBlockID(context, request, &response);
     if (status.ok()) {
         if (response.has_execution_result())
-            result = std::make_unique<flow::access:ExecutionResult>(response.execution_result());
+            result = std::make_unique<flow::access::ExecutionResult>(response.execution_result());
     }
             
     return result;
