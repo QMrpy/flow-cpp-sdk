@@ -44,11 +44,17 @@ Flow C++ SDK For Flow Hackathon
       make -j
       ```
      
-     The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5.
+     The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5. The executable `main` will be created in the `cmake/build` directory.
 
 ## Steps to run the FlowClient
 
-Run the binary `main`, using the URL of the `host` Flow network.
+1. Start the flow emulator from a terminal.
+
+      ```
+      flow emulator
+      ```
+      
+2. From another terminal, run the binary `main`, using the URL of the `host` Flow network.
 
       ```
       ./main <host>[flow-emulator|flow-mainnet|flow-testnet]
