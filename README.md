@@ -42,13 +42,14 @@ Flow C++ SDK For Flow Hackathon
       pushd cmake/build
       cmake -DCMAKE_PREFIX_PATH=$MY_INSTALL_DIR ../..
       make -j
+      popd
       ```
      
      The above steps lead to a successful build on Ubuntu WSL2 and Mac OSX Big Sur 11.5. The executable `main` will be created in the `cmake/build` directory.
 
 ## Steps to run the FlowClient
 
-1. Start the flow emulator from a terminal.
+1. Start the flow emulator from a terminal, from a directory where a configuration file `flow.json` is present.
 
       ```
       flow emulator
