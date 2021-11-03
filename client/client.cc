@@ -12,104 +12,84 @@ FlowClient::FlowClient(const std::shared_ptr< ::grpc::ChannelInterface>& channel
     return status;
 }
 
-flow::access::BlockHeader* FlowClient::GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed) {
+std::unique_ptr<flow::access::BlockHeader> FlowClient::GetLatestBlockHeader(::grpc::ClientContext* context, bool is_sealed) {
     flow::access::GetLatestBlockHeaderRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader* block_header;
+    std::unique_ptr<flow::access::BlockHeader> block_header;
 
     request.set_is_sealed(is_sealed);
 
     ::grpc::Status status = stub_->GetLatestBlockHeader(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block_header = new flow::access::BlockHeader(response.block());
-            return block_header;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block())
+            block_header = std::make_unique<flow::access::BlockHeader>(response.block());
     }
+
+    return block_header;
 }
 
-flow::access::BlockHeader* FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const std::string& id) {
+std::unique_ptr<flow::access::BlockHeader> FlowClient::GetBlockHeaderByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetBlockHeaderByIDRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader* block_header;
+    std::unique_ptr<flow::access::BlockHeader> block_header;
 
     request.set_id(id);
 
     ::grpc::Status status = stub_->GetBlockHeaderByID(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block_header = new flow::access::BlockHeader(response.block());
-            return block_header;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block())
+            block_header = std::make_unique<flow::access::BlockHeader>(response.block());
     }
+
+    return block_header;
 }
 
-flow::access::BlockHeader* FlowClient::GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height) {
+std::unique_ptr<flow::access::BlockHeader> FlowClient::GetBlockHeaderByHeight(::grpc::ClientContext* context, uint64_t height) {
     flow::access::GetBlockHeaderByHeightRequest request;
     flow::access::BlockHeaderResponse response;
-    flow::access::BlockHeader* block_header;
+    std::unique_ptr<flow::access::BlockHeader> block_header;
 
     request.set_height(height);
 
     ::grpc::Status status = stub_->GetBlockHeaderByHeight(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block_header = new flow::access::BlockHeader(response.block());
-            return block_header;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block())
+            block_header = std::make_unique<flow::access::BlockHeader>(response.block());
     }
+
+    return block_header;
 }
 
-flow::access::Block* FlowClient::GetLatestBlock(::grpc::ClientContext* context, bool is_sealed) {
+std::unique_ptr<flow::access::Block> FlowClient::GetLatestBlock(::grpc::ClientContext* context, bool is_sealed) {
     flow::access::GetLatestBlockRequest request;
     flow::access::BlockResponse response;
-    flow::access::Block* block;
+    std::unique_ptr<flow::access::Block> block;
 
     request.set_is_sealed(is_sealed);
 
     ::grpc::Status status = stub_->GetLatestBlock(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block = new flow::access::Block(response.block());
-            return block;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block())
+            block = std::make_unique<flow::access::Block>(response.block());
     }
+
+    return block;
 }
 
-flow::access::Block* FlowClient::GetBlockByID(::grpc::ClientContext* context, const std::string& id) {
+std::unique_ptr<flow::access::Block> FlowClient::GetBlockByID(::grpc::ClientContext* context, const std::string& id) {
     flow::access::GetBlockByIDRequest request;
     flow::access::BlockResponse response;
-    flow::access::Block* block;
+    std::unique_ptr<flow::access::Block> block;
 
     request.set_id(id);
 
     ::grpc::Status status = stub_->GetBlockByID(context, request, &response);
     if (status.ok()) {
-        if (response.has_block()) {
-            block = new flow::access::Block(response.block());
-            return block;
-        } else {
-            return nullptr;
-        }
-    } else {
-        return nullptr;
+        if (response.has_block()) 
+            block = std::make_unique<flow::access::Block>(response.block());
     }
+
+    return block;
 }
 
 flow::access::Block* FlowClient::GetBlockByHeight(::grpc::ClientContext* context, uint64_t height) {
